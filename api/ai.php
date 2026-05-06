@@ -1,54 +1,60 @@
 <?php
-require_once __DIR__ . '/../inc/functions.php';
+// api/ai.php
 
-header('Content-Type: application/json; charset=utf-8');
-
-// Seguridad: Solo usuarios logueados
-if (!current_user_id()) {
-    http_response_code(401);
-    echo json_encode(['error' => 'No autorizado']);
-    exit;
+// 1. Intentamos cargar las funciones. 
+// Si da error, asegúrate de que la carpeta 'inc' esté al mismo nivel que 'api'
+if (file_exists(__DIR__ . '/../inc/functions.php')) {
+    require_once __DIR__ . '/../inc/functions.php';
 }
 
-$title = trim($_POST['title'] ?? '');
-// Tu API Key integrada
-$apiKey = "AIzaSyB2muxr2Icd9HiYqP5TLoURJ78EgiyGMa8"; 
+header('Content-Type: application/json');
+
+
+// --- CONFIGURACIÓN ---
+$geminiKey = 'AIzaSyB2muxr2Icd9HiYqP5TLoURJ78EgiyGMa8'; 
+$title = $_POST['title'] ?? '';
+$action = $_POST['action'] ?? '';
 
 if (empty($title)) {
-    echo json_encode(['error' => 'El título es obligatorio']);
+    echo json_encode(['error' => 'No se recibió el título']);
     exit;
 }
 
-// Configuración para Gemini 2.5 Flash
-$url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $apiKey;
+$url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $geminiKey;
 
-$prompt = "Actúa como una enciclopedia de videojuegos. Para el título '$title', devuelve un JSON estrictamente con: 
-'description' (español, máx 200 caracteres), 
-'release_year' (año de lanzamiento), 
-'image_query' (términos para buscar la portada oficial).";
+// Elegir el prompt
+if ($action === 'get_year') {
+    $prompt = "Videojuego: " . $title . ". Responde SOLO el año de lanzamiento (4 números).";
+} else {
+    $prompt = "Videojuego: " . $title . ". Dame una descripción breve en español (2 líneas).";
+}
 
-$data = [
-    "contents" => [["parts" => [["text" => $prompt]]]],
-    "generationConfig" => [
-        "response_mime_type" => "application/json"
-    ]
-];
+$data = ["contents" => [["parts" => [["text" => $prompt]]]]];
 
-// Llamada a la API mediante cURL
+// Llamada a Google
 $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-
-$result = curl_exec($ch);
+$response = curl_exec($ch);
+$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
-if ($result) {
-    $decoded = json_decode($result, true);
-    // Extraemos el JSON generado por la IA
-    $ai_response = $decoded['candidates'][0]['content']['parts'][0]['text'] ?? '{}';
-    echo $ai_response; 
-} else {
-    echo json_encode(['error' => 'Error al conectar con la IA de Google']);
+$result = json_decode($response, true);
+
+if ($httpCode !== 200) {
+    $msg = $result['error']['message'] ?? 'Error en la API';
+    echo json_encode(['error' => 'Google dice: ' . $msg]);
+    exit;
 }
+
+$aiText = $result['candidates'][0]['content']['parts'][0]['text'] ?? '';
+
+if ($action === 'get_year') {
+    $year = preg_replace('/[^0-9]/', '', $aiText);
+    echo json_encode(['release_year' => substr($year, 0, 4)]);
+} else {
+    echo json_encode(['description' => trim($aiText)]);
+}
+exit;
