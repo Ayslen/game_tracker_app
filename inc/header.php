@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= h(APP_NAME) ?></title>
+    <link rel="stylesheet" href="Fronted/style.css">
 </head>
 <body>
 <header>
@@ -27,5 +28,6 @@
             <option value="en" <?= ($LANG === 'en') ? 'selected' : '' ?>>English pendiente</option>
         </select>
     </form>
+    <script src="Fronted/app.js"></script>
     <hr>
 </header>

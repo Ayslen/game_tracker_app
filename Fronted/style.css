@@ -1,0 +1,308 @@
+/* =========================================
+   VARIABLES Y RESET
+   ========================================= */
+:root {
+    --bg-dark: #0d0d0d;
+    --bg-card: rgba(255, 255, 255, 0.05);
+    --neon-purple: #bc13fe;
+    --neon-green: #39ff14;
+    --neon-blue: #00d4ff;
+    --error-red: #ff4444;
+    --text-main: #e0e0e0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-dark);
+    background: radial-gradient(circle, #1a1a2e 0%, #0d0d0d 100%);
+    color: var(--text-main);
+    font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+    margin: 0;
+    min-height: 100vh;
+}
+
+/* =========================================
+   LOGIN Y REGISTRO (UX Alumno 4)
+   ========================================= */
+.login-container {
+    background: var(--bg-card);
+    padding: 2.5rem;
+    border-radius: 15px;
+    border: 2px solid var(--neon-purple);
+    box-shadow: 0 0 20px var(--neon-purple), inset 0 0 10px var(--neon-purple);
+    backdrop-filter: blur(10px);
+    width: 100%;
+    max-width: 400px;
+    margin: 100px auto;
+    text-align: center;
+}
+
+.neon-text {
+    color: var(--neon-green);
+    text-shadow: 0 0 10px var(--neon-green);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+input[type="text"], 
+input[type="password"], 
+input[type="search"],
+select {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--neon-purple);
+    padding: 12px;
+    color: white;
+    border-radius: 5px;
+    margin-top: 8px;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: var(--neon-green);
+    box-shadow: 0 0 10px var(--neon-green);
+}
+
+.btn-neon {
+    background: transparent;
+    border: 2px solid var(--neon-green);
+    color: var(--neon-green);
+    padding: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%;
+    margin-top: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.btn-neon:hover {
+    background: var(--neon-green);
+    color: black;
+    box-shadow: 0 0 30px var(--neon-green);
+}
+
+/* =========================================
+   DASHBOARD (Cuadrícula de Juegos)
+   ========================================= */
+#game-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    padding: 20px;
+}
+
+.game-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(188, 19, 254, 0.3);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+.game-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--neon-purple);
+    box-shadow: 0 10px 30px rgba(188, 19, 254, 0.4);
+}
+
+.game-poster {
+    width: 100%;
+    height: 160px;
+    background: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.game-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* --- Barras de Progreso --- */
+.progress-bar-bg {
+    height: 10px;
+    background: #222;
+    border-radius: 5px;
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--neon-purple), var(--neon-blue));
+    box-shadow: 0 0 10px var(--neon-blue);
+}
+
+/* --- Estrellas --- */
+.star-rating {
+    color: #444;
+}
+.star.filled {
+    color: #ffcc00;
+    text-shadow: 0 0 8px #ffcc00;
+}
+
+/* --- Badges de Estado --- */
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-completado { background: rgba(57, 255, 20, 0.2); color: var(--neon-green); border: 1px solid var(--neon-green); }
+.status-en-progreso { background: rgba(0, 212, 255, 0.2); color: var(--neon-blue); border: 1px solid var(--neon-blue); }
+.status-abandonado { background: rgba(255, 68, 68, 0.2); color: var(--error-red); border: 1px solid var(--error-red); }
+
+/* =========================================
+   UTILIDADES
+   ========================================= */
+.error-log {
+    color: var(--error-red);
+    background: rgba(255, 68, 68, 0.1);
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 15px;
+    display: none; /* Se activa con JS */
+}
+
+.hero-container {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 50px 20px;
+}
+
+.neon-text-flicker {
+    font-size: 5rem;
+    color: var(--neon-purple);
+    text-shadow: 0 0 10px var(--neon-purple), 0 0 20px var(--neon-purple);
+    animation: flicker 2s infinite alternate;
+}
+
+@keyframes flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        text-shadow: 0 0 10px var(--neon-purple), 0 0 20px var(--neon-purple);
+    }
+    20%, 22%, 24%, 55% {
+        text-shadow: none;
+        color: #333;
+    }
+}
+
+.btn-neon-large {
+    display: inline-block;
+    padding: 20px 50px;
+    font-size: 1.5rem;
+    color: var(--neon-green);
+    border: 3px solid var(--neon-green);
+    text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 5px;
+    margin: 40px 0;
+    transition: 0.5s;
+}
+
+.btn-neon-large:hover {
+    background: var(--neon-green);
+    color: black;
+    box-shadow: 0 0 50px var(--neon-green);
+}
+
+.stats-preview {
+    display: flex;
+    justify-content: space-around;
+    margin: 50px 0;
+}
+
+/* Botones dentro de la tarjeta de juego */
+.game-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 10px;
+}
+
+.btn-card-edit {
+    color: var(--neon-blue) !important;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border: 1px solid var(--neon-blue);
+    padding: 5px 10px;
+    transition: 0.3s;
+}
+
+.btn-card-edit:hover {
+    background: var(--neon-blue);
+    color: #000 !important;
+    box-shadow: 0 0 10px var(--neon-blue);
+}
+
+.btn-card-delete {
+    background: transparent;
+    color: #ff4444;
+    border: 1px solid #ff4444;
+    cursor: pointer;
+    font-size: 0.8rem;
+    padding: 5px 10px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-card-delete:hover {
+    background: #ff4444;
+    color: #fff;
+    box-shadow: 0 0 10px #ff4444;
+}
+
+/* Estilo para los filtros de arriba */
+.btn-apply {
+    background: var(--neon-purple);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-weight: bold;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+
+.btn-apply:hover {
+    box-shadow: 0 0 15px var(--neon-purple);
+    transform: translateY(-2px);
+}
+
+/* El link de añadir juego como botón */
+.btn-neon-add {
+    color: var(--neon-green) !important;
+    text-decoration: none;
+    border: 1px solid var(--neon-green);
+    padding: 5px 15px;
+    display: inline-block;
+    margin-left: 10px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-neon-add:hover {
+    background: var(--neon-green);
+    color: #000 !important;
+    box-shadow: 0 0 15px var(--neon-green);
+}
+
+.neon-green-text { color: var(--neon-green); font-size: 2rem; font-weight: bold; }
+.neon-purple-text { color: var(--neon-purple); font-size: 2rem; font-weight: bold; }

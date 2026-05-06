@@ -36,14 +36,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 require_once __DIR__ . '/inc/header.php';
 ?>
 
-<h2><?= h(t('edit_game')) ?></h2>
+<main class="dashboard-main">
+    <div class="form-container login-container">
+        <h2 class="neon-text"><?= h(t('edit_game')) ?></h2>
 
-<?php if ($error): ?>
-    <p><?= h($error) ?></p>
-<?php endif; ?>
+        <?php if ($error): ?>
+            <p class="error-log" style="display:block;"><?= h($error) ?></p>
+        <?php endif; ?>
 
-<form method="post" enctype="multipart/form-data">
-    <?php require __DIR__ . '/game_form.php'; ?>
-</form>
+        <form method="post" enctype="multipart/form-data" class="gamer-form">
+            <!-- Al actualizar game_form.php, este archivo se verá automáticamente con estilo gamer -->
+            <?php require __DIR__ . '/game_form.php'; ?>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn-neon-save">ACTUALIZAR</button>
+                <a href="index.php" class="btn-cancel">VOLVER </a>
+            </div>
+        </form>
+    </div>
+</main>
 
 <?php require_once __DIR__ . '/inc/footer.php'; ?>

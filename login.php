@@ -24,20 +24,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 require_once __DIR__ . '/inc/header.php';
 ?>
 
-<h2><?= h(t('login')) ?></h2>
+<main class="login-page">
+    <div class="login-container">
+        <h2 class="neon-text"><?= h(t('login')) ?></h2>
 
-<?php if ($error): ?>
-    <p><?= h($error) ?></p>
-<?php endif; ?>
+        <?php if ($error): ?>
+            <p class="error-log" style="display:block;"><?= h($error) ?></p>
+        <?php endif; ?>
 
-<form method="post">
-    <label><?= h(t('username')) ?></label><br>
-    <input type="text" name="username" required><br><br>
+        <form method="post" class="gamer-form">
+            <div class="input-group">
+                <label class="neon-label"><?= h(t('username')) ?></label>
+                <input type="text" name="username" required placeholder="Nick de jugador..." class="gamer-input">
+            </div>
 
-    <label><?= h(t('password')) ?></label><br>
-    <input type="password" name="password" required><br><br>
+            <div class="input-group">
+                <label class="neon-label"><?= h(t('password')) ?></label>
+                <input type="password" name="password" required placeholder="********" class="gamer-input">
+            </div>
 
-    <button type="submit"><?= h(t('login')) ?></button>
-</form>
+            <button type="submit" class="btn-neon">
+                <span class="btn-text">INICIAR SESIÓN</span>
+            </button>
+        </form>
+
+        <div class="form-footer">
+            <p>¿No tienes cuenta? <a href="register.php" class="neon-link">Regístrate aquí</a></p>
+        </div>
+    </div>
+</main>
 
 <?php require_once __DIR__ . '/inc/footer.php'; ?>
