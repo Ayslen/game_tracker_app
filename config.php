@@ -4,7 +4,7 @@
 // Si tu XAMPP usa 3307, cambia DB_PORT a 3307.
 
 define('DB_HOST', '127.0.0.1');
-define('DB_PORT', '3306');
+define('DB_PORTS', [3306, 3307]);
 define('DB_NAME', 'game_tracker');
 define('DB_USER', 'root');
 define('DB_PASS', '');
