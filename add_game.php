@@ -4,7 +4,6 @@ require_once __DIR__ . '/inc/functions.php';
 require_login();
 
 $error = '';
-$game = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = trim($_POST['title'] ?? '');
@@ -28,14 +27,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 require_once __DIR__ . '/inc/header.php';
 ?>
 
-<h2><?= h(t('add_game')) ?></h2>
+<main class="dashboard-main">
+    <div class="form-container login-container">
+        <h2 class="neon-text">AÑADIR NUEVO JUEGO</h2>
 
-<?php if ($error): ?>
-    <p><?= h($error) ?></p>
-<?php endif; ?>
+        <?php if ($error): ?>
+            <p class="error-log" style="display:block;"><?= h($error) ?></p>
+        <?php endif; ?>
 
-<form method="post" enctype="multipart/form-data">
-    <?php require __DIR__ . '/game_form.php'; ?>
-</form>
+        <form method="post" enctype="multipart/form-data" class="gamer-form">
+            <!-- Usamos el mismo archivo de formulario pero con tus estilos de Alumno 4 -->
+            <?php require __DIR__ . '/game_form.php'; ?>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn-neon">GUARDAR EN BIBLIOTECA</button>
+                <a href="index.php" class="btn-secondary">CANCELAR</a>
+            </div>
+        </form>
+    </div>
+</main>
 
 <?php require_once __DIR__ . '/inc/footer.php'; ?>
