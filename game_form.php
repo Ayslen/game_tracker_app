@@ -42,7 +42,7 @@
 </div>
 
 <script>
-// --- 1. ESTRELLAS ---
+// --- 1. ESTRELLAS -
 document.querySelectorAll('.star').forEach(star => {
     star.onclick = function() {
         const val = this.getAttribute('data-value');

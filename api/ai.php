@@ -1,8 +1,5 @@
 <?php
-// api/ai.php
 
-// 1. Intentamos cargar las funciones. 
-// Si da error, asegúrate de que la carpeta 'inc' esté al mismo nivel que 'api'
 if (file_exists(__DIR__ . '/../inc/functions.php')) {
     require_once __DIR__ . '/../inc/functions.php';
 }
