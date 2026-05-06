@@ -7,7 +7,7 @@ require_once __DIR__ . '/inc/functions.php';
 
 <form id="form-juego" action="save_game.php" method="POST">
     <label>Título</label><br>
-    <input type="text" name="title" id="title" placeholder="Ej: Sonic Frontiers"><br>
+    <input type="text" name="title" id="title" placeholder=""><br>
 
     <label>Descripción</label><br>
     <textarea name="description" id="description" rows="5" cols="40"></textarea><br>
