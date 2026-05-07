@@ -1,5 +1,5 @@
 /* =========================================
-   VARIABLES Y RESET
+   VARIABLES Y CONFIGURACIÓN 
    ========================================= */
 :root {
     --bg-dark: #0d0d0d;
@@ -25,8 +25,74 @@ body {
 }
 
 /* =========================================
-   LOGIN Y REGISTRO (UX Alumno 4)
+   NAVEGACIÓN GAMER (Botones de arriba)
    ========================================= */
+header nav {
+    padding: 20px 40px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    /* Esto lo empuja a la derecha si el título está a la izquierda */
+    justify-content: flex-end; 
+}
+
+header nav a {
+    text-decoration: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    padding: 8px 15px;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    color: var(--neon-blue);
+    text-shadow: 0 0 8px var(--neon-blue);
+}
+
+/* Hover general para los links */
+header nav a:hover {
+    color: #fff;
+    border-bottom: 2px solid white;
+    transform: translateY(-3px);
+}
+
+/* Color específico para "Añadir Juego" */
+header nav a[href*="add_game"] {
+    color: var(--neon-green);
+    text-shadow: 0 0 8px var(--neon-green);
+    border: 1px solid rgba(57, 255, 20, 0.2);
+    border-radius: 4px;
+}
+
+header nav a[href*="add_game"]:hover {
+    background: rgba(57, 255, 20, 0.1);
+    box-shadow: 0 0 15px var(--neon-green);
+    text-shadow: 0 0 15px var(--neon-green);
+}
+
+/* Color específico para "Cerrar Sesión" */
+header nav a[href*="logout"] {
+    color: var(--error-red);
+    text-shadow: 0 0 8px var(--error-red);
+}
+
+header nav a[href*="logout"]:hover {
+    text-shadow: 0 0 15px var(--error-red);
+    border-bottom-color: var(--error-red);
+}
+
+/* =========================================
+   PÁGINAS DE AUTH (Login y Registro Limpios)
+   ========================================= */
+.auth-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
 .login-container {
     background: var(--bg-card);
     padding: 2.5rem;
@@ -36,8 +102,13 @@ body {
     backdrop-filter: blur(10px);
     width: 100%;
     max-width: 400px;
-    margin: 100px auto;
     text-align: center;
+    margin-bottom: 60px; 
+    transition: transform 0.3s;
+}
+
+.login-container:hover {
+    transform: scale(1.02);
 }
 
 .neon-text {
@@ -45,12 +116,29 @@ body {
     text-shadow: 0 0 10px var(--neon-green);
     letter-spacing: 3px;
     text-transform: uppercase;
+    margin-bottom: 25px;
 }
 
+.neon-label {
+    display: block;
+    color: var(--neon-blue);
+    text-shadow: 0 0 5px var(--neon-blue);
+    text-align: left;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+/* =========================================
+   FORMULARIOS Y BOTONES
+   ========================================= */
 input[type="text"], 
 input[type="password"], 
 input[type="search"],
-select {
+input[type="number"],
+select, 
+textarea {
     width: 100%;
     background: rgba(0, 0, 0, 0.6);
     border: 1px solid var(--neon-purple);
@@ -62,7 +150,7 @@ select {
     transition: 0.3s;
 }
 
-input:focus {
+input:focus, select:focus {
     border-color: var(--neon-green);
     box-shadow: 0 0 10px var(--neon-green);
 }
@@ -76,7 +164,7 @@ input:focus {
     cursor: pointer;
     transition: 0.3s;
     width: 100%;
-    margin-top: 20px;
+    margin-top: 25px;
     text-transform: uppercase;
     letter-spacing: 2px;
 }
@@ -88,9 +176,9 @@ input:focus {
 }
 
 /* =========================================
-   DASHBOARD (Cuadrícula de Juegos)
+   DASHBOARD (Grid de Juegos)
    ========================================= */
-#game-list {
+.game-cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 25px;
@@ -115,7 +203,7 @@ input:focus {
 
 .game-poster {
     width: 100%;
-    height: 160px;
+    height: 180px;
     background: #111;
     display: flex;
     align-items: center;
@@ -126,6 +214,10 @@ input:focus {
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+.game-card-content {
+    padding: 15px;
 }
 
 /* --- Barras de Progreso --- */
@@ -145,7 +237,11 @@ input:focus {
 
 /* --- Estrellas --- */
 .star-rating {
+    margin: 10px 0;
+}
+.star {
     color: #444;
+    font-size: 1.2rem;
 }
 .star.filled {
     color: #ffcc00;
@@ -157,77 +253,18 @@ input:focus {
     display: inline-block;
     padding: 4px 10px;
     border-radius: 20px;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: bold;
     text-transform: uppercase;
 }
 
-.status-completado { background: rgba(57, 255, 20, 0.2); color: var(--neon-green); border: 1px solid var(--neon-green); }
-.status-en-progreso { background: rgba(0, 212, 255, 0.2); color: var(--neon-blue); border: 1px solid var(--neon-blue); }
-.status-abandonado { background: rgba(255, 68, 68, 0.2); color: var(--error-red); border: 1px solid var(--error-red); }
+.status-completado { background: rgba(57, 255, 20, 0.1); color: var(--neon-green); border: 1px solid var(--neon-green); }
+.status-en-progreso { background: rgba(0, 212, 255, 0.1); color: var(--neon-blue); border: 1px solid var(--neon-blue); }
+.status-abandonado { background: rgba(255, 68, 68, 0.1); color: var(--error-red); border: 1px solid var(--error-red); }
 
 /* =========================================
-   UTILIDADES
+   BOTONES DE ACCIÓN (Cards y Filtros)
    ========================================= */
-.error-log {
-    color: var(--error-red);
-    background: rgba(255, 68, 68, 0.1);
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 15px;
-    display: none; /* Se activa con JS */
-}
-
-.hero-container {
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 50px 20px;
-}
-
-.neon-text-flicker {
-    font-size: 5rem;
-    color: var(--neon-purple);
-    text-shadow: 0 0 10px var(--neon-purple), 0 0 20px var(--neon-purple);
-    animation: flicker 2s infinite alternate;
-}
-
-@keyframes flicker {
-    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-        text-shadow: 0 0 10px var(--neon-purple), 0 0 20px var(--neon-purple);
-    }
-    20%, 22%, 24%, 55% {
-        text-shadow: none;
-        color: #333;
-    }
-}
-
-.btn-neon-large {
-    display: inline-block;
-    padding: 20px 50px;
-    font-size: 1.5rem;
-    color: var(--neon-green);
-    border: 3px solid var(--neon-green);
-    text-decoration: none;
-    font-weight: bold;
-    letter-spacing: 5px;
-    margin: 40px 0;
-    transition: 0.5s;
-}
-
-.btn-neon-large:hover {
-    background: var(--neon-green);
-    color: black;
-    box-shadow: 0 0 50px var(--neon-green);
-}
-
-.stats-preview {
-    display: flex;
-    justify-content: space-around;
-    margin: 50px 0;
-}
-
-/* Botones dentro de la tarjeta de juego */
 .game-actions {
     display: flex;
     gap: 10px;
@@ -236,64 +273,56 @@ input:focus {
     padding-top: 10px;
 }
 
-.btn-card-edit {
-    color: var(--neon-blue) !important;
-    text-decoration: none;
-    font-size: 0.8rem;
+.btn-card-edit, .btn-card-delete {
+    padding: 6px 12px;
+    font-size: 0.75rem;
     font-weight: bold;
-    border: 1px solid var(--neon-blue);
-    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 4px;
     transition: 0.3s;
+}
+
+.btn-card-edit {
+    color: var(--neon-blue);
+    border: 1px solid var(--neon-blue);
 }
 
 .btn-card-edit:hover {
     background: var(--neon-blue);
-    color: #000 !important;
-    box-shadow: 0 0 10px var(--neon-blue);
+    color: #000;
 }
 
 .btn-card-delete {
     background: transparent;
-    color: #ff4444;
-    border: 1px solid #ff4444;
+    color: var(--error-red);
+    border: 1px solid var(--error-red);
     cursor: pointer;
-    font-size: 0.8rem;
-    padding: 5px 10px;
-    font-weight: bold;
-    transition: 0.3s;
 }
 
 .btn-card-delete:hover {
-    background: #ff4444;
+    background: var(--error-red);
     color: #fff;
-    box-shadow: 0 0 10px #ff4444;
 }
 
-/* Estilo para los filtros de arriba */
 .btn-apply {
     background: var(--neon-purple);
     color: white;
     border: none;
-    padding: 8px 15px;
+    padding: 10px 20px;
     cursor: pointer;
     font-weight: bold;
-    letter-spacing: 1px;
     transition: 0.3s;
 }
 
 .btn-apply:hover {
     box-shadow: 0 0 15px var(--neon-purple);
-    transform: translateY(-2px);
 }
 
-/* El link de añadir juego como botón */
 .btn-neon-add {
     color: var(--neon-green) !important;
     text-decoration: none;
     border: 1px solid var(--neon-green);
-    padding: 5px 15px;
-    display: inline-block;
-    margin-left: 10px;
+    padding: 8px 15px;
     font-weight: bold;
     transition: 0.3s;
 }
@@ -304,5 +333,55 @@ input:focus {
     box-shadow: 0 0 15px var(--neon-green);
 }
 
-.neon-green-text { color: var(--neon-green); font-size: 2rem; font-weight: bold; }
-.neon-purple-text { color: var(--neon-purple); font-size: 2rem; font-weight: bold; }
+/* =========================================
+   UTILIDADES Y FOOTER
+   ========================================= */
+.error-log {
+    color: var(--error-red);
+    background: rgba(255, 68, 68, 0.1);
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+}
+
+footer hr {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 20px;
+}
+
+/* =========================================
+   TOP BRANDING (Título esquina)
+   ========================================= */
+.top-branding {
+    position: absolute;
+    top: 20px;
+    left: 40px;
+    width: auto;
+}
+
+.brand-title {
+    font-size: 1.8rem;
+    color: #fff;
+    margin: 0;
+    font-family: 'Rajdhani', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px var(--neon-purple); 
+}
+
+@media (max-width: 600px) {
+    .top-branding {
+        position: relative;
+        left: 0;
+        top: 0;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+}

@@ -20,38 +20,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Usuario o contraseña incorrectos.';
     }
 }
-
-require_once __DIR__ . '/inc/header.php';
 ?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - GAME TRACKER</title>
+    <link rel="stylesheet" href="Fronted/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body class="auth-page">
 
-<main class="login-page">
+    <header class="top-branding">
+        <h1 class="brand-title">Seguimiento de Juegos</h1>
+    </header>
+
     <div class="login-container">
-        <h2 class="neon-text"><?= h(t('login')) ?></h2>
+        <h2 class="neon-text">INICIAR SESIÓN</h2>
 
         <?php if ($error): ?>
             <p class="error-log" style="display:block;"><?= h($error) ?></p>
         <?php endif; ?>
 
         <form method="post" class="gamer-form">
-            <div class="input-group">
-                <label class="neon-label"><?= h(t('username')) ?></label>
-                <input type="text" name="username" required placeholder="Nick de jugador..." class="gamer-input">
-            </div>
+            <label class="neon-label">Usuario</label>
+            <input type="text" name="username" required placeholder="Nick de jugador...">
 
-            <div class="input-group">
-                <label class="neon-label"><?= h(t('password')) ?></label>
-                <input type="password" name="password" required placeholder="********" class="gamer-input">
-            </div>
+            <label class="neon-label" style="margin-top:15px; display:block;">Contraseña</label>
+            <input type="password" name="password" required placeholder="********">
 
-            <button type="submit" class="btn-neon">
-                <span class="btn-text">INICIAR SESIÓN</span>
-            </button>
+            <button type="submit" class="btn-neon">ENTRAR</button>
         </form>
 
-        <div class="form-footer">
-            <p>¿No tienes cuenta? <a href="register.php" class="neon-link">Regístrate aquí</a></p>
+        <div style="margin-top:20px;">
+            <p>¿Eres nuevo? <a href="register.php" style="color:var(--neon-blue); text-decoration:none; font-weight:bold;">Regístrate aquí</a></p>
         </div>
     </div>
-</main>
 
-<?php require_once __DIR__ . '/inc/footer.php'; ?>
+    <?php require_once __DIR__ . '/inc/footer.php'; ?>
+</body>
+</html>
