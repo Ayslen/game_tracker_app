@@ -22,14 +22,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $progress = max(0, min(100, (int)($_POST['progress'] ?? 0)));
     $rating = ($_POST['rating'] ?? '') === '' ? null : max(1, min(5, (int)$_POST['rating']));
     $releaseYear = ($_POST['release_year'] ?? '') === '' ? null : (int)$_POST['release_year'];
-    $imagePath = upload_game_image('image', $game['image_path']);
 
     if ($title === '') {
         $error = 'El título es obligatorio.';
     } else {
-        $stmt = db()->prepare('UPDATE games SET title = ?, description = ?, notes = ?, image_path = ?, status = ?, progress = ?, rating = ?, release_year = ? WHERE id = ? AND user_id = ?');
-        $stmt->execute([$title, $description, $notes, $imagePath, $status, $progress, $rating, $releaseYear, $id, current_user_id()]);
-        redirect('index.php');
+        try {
+            $imagePath = upload_game_image('image', $game['image_path']);
+
+            $stmt = db()->prepare('
+                UPDATE games
+                SET title = ?,
+                    description = ?,
+                    notes = ?,
+                    image_path = ?,
+                    status = ?,
+                    progress = ?,
+                    rating = ?,
+                    release_year = ?
+                WHERE id = ? AND user_id = ?
+            ');
+
+            $stmt->execute([
+                $title,
+                $description,
+                $notes,
+                $imagePath,
+                $status,
+                $progress,
+                $rating,
+                $releaseYear,
+                $id,
+                current_user_id()
+            ]);
+
+            redirect('index.php');
+        } catch (RuntimeException $e) {
+            $error = $e->getMessage();
+        }
     }
 }
 
@@ -45,12 +74,11 @@ require_once __DIR__ . '/inc/header.php';
         <?php endif; ?>
 
         <form method="post" enctype="multipart/form-data" class="gamer-form">
-            <!-- Al actualizar game_form.php, este archivo se verá automáticamente con estilo gamer -->
             <?php require __DIR__ . '/game_form.php'; ?>
-            
+
             <div class="form-actions">
                 <button type="submit" class="btn-neon-save">ACTUALIZAR</button>
-                <a href="index.php" class="btn-cancel">VOLVER </a>
+                <a href="index.php" class="btn-cancel">VOLVER</a>
             </div>
         </form>
     </div>
