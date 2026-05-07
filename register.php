@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($username === '') {
         $error = 'Debes escribir un usuario.';
     } elseif (!password_is_valid($password)) {
-        // Regla obligatoria: 8 caracteres y 2 números
+        // Regla: 8 caracteres y 2 números
         $error = 'La contraseña debe tener mínimo 8 caracteres y al menos 2 números.';
     } else {
         $stmt = db()->prepare('SELECT id FROM users WHERE username = ?');
@@ -27,39 +27,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-
-require_once __DIR__ . '/inc/header.php';
 ?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - GAME TRACKER</title>
+    <link rel="stylesheet" href="Fronted/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body class="auth-page">
 
-<main class="login-page">
+    <header class="top-branding">
+        <h1 class="brand-title">Seguimiento de Juegos</h1>
+    </header>
+
     <div class="login-container">
-        <h2 class="neon-text"><?= h(t('register')) ?></h2>
+        <h2 class="neon-text">REGISTRO</h2>
 
         <?php if ($error): ?>
             <p class="error-log" style="display:block;"><?= h($error) ?></p>
         <?php endif; ?>
 
-        <form method="post" id="registrationForm" class="gamer-form">
-            <div class="input-group">
-                <label class="neon-label"><?= h(t('username')) ?></label>
-                <input type="text" name="username" required placeholder="Tu nuevo nick..." class="gamer-input">
-            </div>
+        <form method="post" class="gamer-form">
+            <label class="neon-label">Usuario</label>
+            <input type="text" name="username" required placeholder="Crea tu nick...">
+            
+            <label class="neon-label" style="margin-top:15px; display:block;">Contraseña</label>
+            <input type="password" name="password" required placeholder="Mín. 8 caracteres y 2 números">
+            <small style="color:#888; font-size:0.8rem; display:block; margin-top:5px;">
+                Seguridad: 8 caracteres y 2 números.
+            </small>
 
-            <div class="input-group">
-                <label class="neon-label"><?= h(t('password')) ?></label>
-                <input type="password" name="password" id="register_password" required minlength="8" placeholder="Contraseña segura" class="gamer-input">
-                <small class="helper-text">Mínimo 8 caracteres y al menos 2 números.</small>
-            </div>
-
-            <button type="submit" class="btn-neon">
-                <span class="btn-text">CREAR CUENTA</span>
-            </button>
+            <button type="submit" class="btn-neon">CREAR CUENTA</button>
         </form>
 
-        <div class="form-footer">
-            <p>¿Ya tienes cuenta? <a href="login.php" class="neon-link">Inicia sesión aquí</a></p>
+        <div style="margin-top:20px;">
+            <p>¿Ya tienes cuenta? <a href="login.php" style="color:var(--neon-blue); text-decoration:none; font-weight:bold;">Inicia sesión aquí</a></p>
         </div>
     </div>
-</main>
 
-<?php require_once __DIR__ . '/inc/footer.php'; ?>
+    <?php require_once __DIR__ . '/inc/footer.php'; ?>
+</body>
+</html>
