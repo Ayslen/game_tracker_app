@@ -1,57 +1,73 @@
 <?php
-
-if (file_exists(__DIR__ . '/../inc/functions.php')) {
-    require_once __DIR__ . '/../inc/functions.php';
-}
-
+/**
+ *
+ */
 header('Content-Type: application/json');
 
+// 1. Configuración de Groq con tu nueva API Key
+$apiKey = "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"; 
+$url = "https://api.groq.com/openai/v1/chat/completions";
 
-// --- CONFIGURACIÓN ---
-$geminiKey = 'AIzaSyB2muxr2Icd9HiYqP5TLoURJ78EgiyGMa8'; 
 $title = $_POST['title'] ?? '';
 $action = $_POST['action'] ?? '';
 
 if (empty($title)) {
-    echo json_encode(['error' => 'No se recibió el título']);
+    echo json_encode(['status' => 'error', 'message' => 'Escribe el nombre del juego']);
     exit;
 }
 
-$url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $geminiKey;
+// 2. Definición del Prompt
+$prompt = ($action === 'get_year') 
+    ? "Dame solo el año de lanzamiento de $title en 4 dígitos, sin texto adicional." 
+    : "Escribe una sinopsis corta de $title en español (máximo 25 palabras).";
 
-// Elegir el prompt
-if ($action === 'get_year') {
-    $prompt = "Videojuego: " . $title . ". Responde SOLO el año de lanzamiento (4 números).";
-} else {
-    $prompt = "Videojuego: " . $title . ". Dame una descripción breve en español (2 líneas).";
-}
+// 3. Estructura del JSON para Groq
+$postData = json_encode([
+    "model" => "llama-3.3-70b-versatile", // Modelo de alto rendimiento
+    "messages" => [
+        [
+            "role" => "system",
+            "content" => "Eres un asistente especializado en videojuegos para el TecNL."
+        ],
+        [
+            "role" => "user",
+            "content" => $prompt
+        ]
+    ],
+    "temperature" => 0.6
+]);
 
-$data = ["contents" => [["parts" => [["text" => $prompt]]]]];
-
-// Llamada a Google
+// 4. Petición cURL
 $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Content-Type: application/json',
+    'Authorization: Bearer ' . $apiKey
+]);
+
 $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+if(curl_errno($ch)){
+    echo json_encode(['status' => 'error', 'message' => 'Error de conexión: ' . curl_error($ch)]);
+    exit;
+}
 curl_close($ch);
 
 $result = json_decode($response, true);
 
+// 5. Manejo de respuesta de Groq
 if ($httpCode !== 200) {
-    $msg = $result['error']['message'] ?? 'Error en la API';
-    echo json_encode(['error' => 'Google dice: ' . $msg]);
+    $errorMsg = $result['error']['message'] ?? 'Error desconocido';
+    echo json_encode(['status' => 'error', 'message' => 'Groq Error: ' . $errorMsg]);
     exit;
 }
 
-$aiText = $result['candidates'][0]['content']['parts'][0]['text'] ?? '';
+$aiText = $result['choices'][0]['message']['content'] ?? 'No se encontró información';
 
-if ($action === 'get_year') {
-    $year = preg_replace('/[^0-9]/', '', $aiText);
-    echo json_encode(['release_year' => substr($year, 0, 4)]);
-} else {
-    echo json_encode(['description' => trim($aiText)]);
-}
-exit;
+// 6. Respuesta para el Frontend
+echo json_encode([
+    'status' => 'success', 
+    'data' => trim($aiText)
+]);
